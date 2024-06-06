@@ -1,7 +1,10 @@
 name: run fanfictonotion
 
 on: 
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+        url:
+          description: "url to parse"
 
 
 jobs:
@@ -27,4 +30,4 @@ jobs:
         env:
           NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
           DATABASE_ID: ${{ vars.DATABASE_ID }}
-          URL: ${{ vars.URL }}
+          URL: ${{ github.event.inputs.url }}
