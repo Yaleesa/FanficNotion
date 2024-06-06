@@ -2,13 +2,12 @@ name: run fanfictonotion
 
 on: 
   workflow_dispatch
-env:
-  # Setting an environment variable with the value of a configuration variable
-  env_var: ${{ vars.ENV_CONTEXT_VAR }}
-  
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: TEST
     steps:
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content
@@ -25,3 +24,7 @@ jobs:
 
       - name: execute py script # run main.py
         run: python run.py
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          DATABASE_ID: ${{ vars.DATABASE_ID }}
+          URL: ${{ vars.URL }}
