@@ -4,7 +4,7 @@ from content_scraper.ao3_scraping import AO3Fic, get_page
 from config import settings
 
 
-def scrape_content(url=settings.URL):
+def scrape_content(url=settings['URL']):
     # scrape page
     return AO3Fic(get_page(url))
 
@@ -16,7 +16,7 @@ def build_data(scraped_fic):
         fandom=scraped_fic.fandom,
         authors=scraped_fic.authors,
         word_count=int(scraped_fic.word_count.replace(",", "")),
-        fic_link=settings.URL,
+        fic_link=settings['URL'],
         summary=scraped_fic.summary,
         pairings=scraped_fic.relationships
         )
@@ -27,7 +27,7 @@ def build_data(scraped_fic):
 
 
 def send_to_notion(data):
-    return DatabaseEntryUpdate(parent_id=settings.DATABASE_ID, data=data).build_request()
+    return DatabaseEntryUpdate(parent_id=settings['DATABASE_ID'], data=data).build_request()
 
 
 def go():

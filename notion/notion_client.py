@@ -4,7 +4,7 @@ import json
 from config import settings
 
 headers = {
-    "Authorization": "Bearer " + settings.NOTION_API_TOKEN,
+    "Authorization": "Bearer " + settings['NOTION_API_TOKEN'],
     "Content-Type": "application/json",
     "Notion-Version": "2022-06-28",
 }
@@ -25,7 +25,7 @@ class DatabaseEntryUpdate:
 
 class DatabaseUpdate:
     def __init__(self, title, data):
-        self.url = f"https://api.notion.com/v1/databases/{settings.DATABASE_ID}"
+        self.url = f"https://api.notion.com/v1/databases/{settings['DATABASE_ID']}"
         self.data = data
         self.title = [{"text": {"content": title}}]
 
@@ -41,7 +41,7 @@ class DatabaseRead:
         """
         If num_pages is None, get all pages, otherwise just the defined number.
         """
-        url = f"https://api.notion.com/v1/databases/{settings.DATABASE_ID}/query"
+        url = f"https://api.notion.com/v1/databases/{settings['DATABASE_ID']}/query"
 
         get_all = num_pages is None
         page_size = 100 if get_all else num_pages
@@ -55,7 +55,7 @@ class DatabaseRead:
         results = data["results"]
         while data["has_more"] and get_all:
             payload = {"page_size": page_size, "start_cursor": data["next_cursor"]}
-            url = f"https://api.notion.com/v1/databases/{settings.DATABASE_ID}/query"
+            url = f"https://api.notion.com/v1/databases/{settings['DATABASE_ID']}/query"
             response = requests.post(url, json=payload, headers=headers)
             data = response.json()
             results.extend(data["results"])
