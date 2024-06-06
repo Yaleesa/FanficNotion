@@ -3,6 +3,7 @@ from notion.notionficdb import FanficDatabaseEndpoint
 from content_scraper.ao3_scraping import AO3Fic, get_page
 from config import settings
 
+print(settings['URL'])
 
 def scrape_content(url=settings['URL']):
     # scrape page
