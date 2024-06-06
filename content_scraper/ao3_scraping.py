@@ -10,8 +10,9 @@ HEADERS = ({'User-Agent':
 
 
 def get_page(url):
+    print(f'dit is de url: {url}')
     webpage = requests.get(url, headers=HEADERS)
-    print(webpage.request.url)
+    print(f'respinse url: {webpage.request.url}')
     print(webpage.request.headers)
     print(webpage.text)
     
