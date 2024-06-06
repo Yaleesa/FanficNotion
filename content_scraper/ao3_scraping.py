@@ -11,7 +11,10 @@ HEADERS = ({'User-Agent':
 
 def get_page(url):
     webpage = requests.get(url, headers=HEADERS)
+    print(webpage.request.url)
+    print(webpage.request.headers)
     print(webpage.text)
+    
     soup = BeautifulSoup(webpage.content, "html.parser") 
     dom = etree.HTML(str(soup))
     return dom
