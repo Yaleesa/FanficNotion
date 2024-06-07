@@ -37,7 +37,7 @@ def build_data(scraped_fic):
 
 
 def send_to_notion(data):
-    return DatabaseEntryUpdate(parent_id=settings['DATABASE_ID_TEST'], data=data).build_request()
+    return DatabaseEntryUpdate(parent_id=settings['DATABASE_ID'], data=data).build_request()
 
 
 def go():
