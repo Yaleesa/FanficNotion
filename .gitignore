@@ -2,6 +2,7 @@ example.json
 ship_table.json
 endpoint_klad
 
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

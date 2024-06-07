@@ -20,7 +20,15 @@ def build_data(scraped_fic):
         word_count=int(scraped_fic.word_count.replace(",", "")),
         fic_link=settings['URL'],
         summary=scraped_fic.summary,
-        pairings=scraped_fic.relationships
+        pairings=scraped_fic.relationships,
+        reading_status="Unread",
+        series=scraped_fic.series,
+        chapters=int(scraped_fic.chapters.split("/")[0]),
+        fic_rating=scraped_fic.rating,
+        fic_status=scraped_fic.status,
+        fic_site=scraped_fic.fanfic_site,
+        published=scraped_fic.published,
+        last_updated=scraped_fic.last_updated
         )
     # vieze hack om alle parent values weg te halen 
     payload_data = dict(prop for val in vars(payload_data).values() for prop in val.items())
@@ -29,8 +37,11 @@ def build_data(scraped_fic):
 
 
 def send_to_notion(data):
-    return DatabaseEntryUpdate(parent_id=settings['DATABASE_ID'], data=data).build_request()
+    return DatabaseEntryUpdate(parent_id=settings['DATABASE_ID_TEST'], data=data).build_request()
 
 
 def go():
     return send_to_notion(build_data(scraped_fic=scrape_content()))
+
+
+

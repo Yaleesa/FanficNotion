@@ -10,11 +10,11 @@ HEADERS = ({'User-Agent':
 
 
 def get_page(url):
-    print(f'dit is de url: {url}')
+    # print(f'dit is de url: {url}')
     webpage = requests.get(url, headers=HEADERS)
-    print(f'respinse url: {webpage.request.url}')
-    print(webpage.request.headers)
-    print(webpage.text)
+    # print(f'respinse url: {webpage.request.url}')
+    # print(webpage.request.headers)
+    # print(webpage.text)
     
     soup = BeautifulSoup(webpage.content, "html.parser") 
     dom = etree.HTML(str(soup))
@@ -30,7 +30,7 @@ class AO3Fic:
         self.dom = dom
         self.fanfic_site = "AO3"
         self.title = get_xpath(self.dom, '//*[@class="title heading"]')[0].text.strip()
-        self.fandom = get_xpath(self.dom, '//dd[@class="fandom tags"]//a')[0].text
+        self.fandom = [fan.text for fan in get_xpath(self.dom, '//dd[@class="fandom tags"]//a')]
         self.authors = [{"name": aut.text, "url": aut.attrib['href']} for aut in get_xpath(self.dom, '//*[@rel="author"]')]
         self.word_count = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="words"]')[0].text
         self.chapters = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="chapters"]')[0].text
@@ -41,6 +41,7 @@ class AO3Fic:
         self.summary = " ".join([par.text for par in get_xpath(self.dom, '//div[@class="summary module"]//blockquote//p')])
         self.relationships = [cat.text for cat in get_xpath(self.dom, '//dd[@class="relationship tags"]/ul/li/a')]
         self.series = get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a')[0].text if get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a') else None
+        self.last_updated = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="status"]')[0].text
 
     # def authors(self):
         
