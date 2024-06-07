@@ -185,7 +185,7 @@ class FanficDatabaseEndpoint:
             "General Audiences": "General / G"
         }
         return {
-                "Fanfiction Rating": {
+                "Fic Rating": {
                     "id": "%3DrZO",
                     "type": "select",
                     "select": {"name": rating_conv.get(fic_rating, fic_rating)}

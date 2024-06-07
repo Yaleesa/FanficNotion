@@ -21,7 +21,7 @@ def build_data(scraped_fic):
         fic_link=settings['URL'],
         summary=scraped_fic.summary,
         pairings=scraped_fic.relationships,
-        reading_status="Unread",
+        reading_status="Not Read",
         series=scraped_fic.series,
         chapters=int(scraped_fic.chapters.split("/")[0]),
         fic_rating=scraped_fic.rating,
