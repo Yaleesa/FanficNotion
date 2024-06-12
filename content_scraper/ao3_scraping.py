@@ -31,7 +31,7 @@ class AO3Fic:
         self.fanfic_site = "AO3"
         self.title = get_xpath(self.dom, '//*[@class="title heading"]')[0].text.strip()
         self.fandom = [fan.text for fan in get_xpath(self.dom, '//dd[@class="fandom tags"]//a')]
-        self.authors = [{"name": aut.text, "url": aut.attrib['href']} for aut in get_xpath(self.dom, '//*[@rel="author"]')]
+        self.authors = [{"name": aut.text, "url": aut.attrib['href']} for aut in get_xpath(self.dom, '//*[@class="byline heading"]//*[@rel="author"]')]
         self.word_count = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="words"]')[0].text
         self.chapters = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="chapters"]')[0].text
         self.status = get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]')[0].text.strip(":")
