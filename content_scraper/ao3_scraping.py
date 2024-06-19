@@ -38,7 +38,7 @@ class AO3Fic:
         self.published = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="published"]')[0].text
         self.rating = get_xpath(self.dom, '//dd[@class="rating tags"]//a')[0].text
         self.category = [cat.text for cat in get_xpath(self.dom, '//dd[@class="category tags"]/ul/li/a')]
-        self.summary = " ".join([par.text for par in get_xpath(self.dom, '//div[@class="summary module"]//blockquote//p')])
+        self.summary = " ".join([par.text for par in get_xpath(self.dom, '//div[@class="summary module"]//blockquote//p') if par.text])
         self.relationships = [cat.text for cat in get_xpath(self.dom, '//dd[@class="relationship tags"]/ul/li/a')]
         self.series = get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a')[0].text if get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a') else None
         self.last_updated = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="status"]')[0].text
