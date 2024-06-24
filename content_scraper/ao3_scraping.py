@@ -34,14 +34,14 @@ class AO3Fic:
         self.authors = [{"name": aut.text, "url": aut.attrib['href']} for aut in get_xpath(self.dom, '//*[@class="byline heading"]//*[@rel="author"]')]
         self.word_count = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="words"]')[0].text
         self.chapters = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="chapters"]')[0].text
-        self.status = get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]')[0].text.strip(":") if get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]')[0].text.strip(":") else 'Completed'  # lelijk
+        self.status = get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]')[0].text.strip(":") if get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]') else 'Completed'  # lelijk
         self.published = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="published"]')[0].text
         self.rating = get_xpath(self.dom, '//dd[@class="rating tags"]//a')[0].text
         self.category = [cat.text for cat in get_xpath(self.dom, '//dd[@class="category tags"]/ul/li/a')]
         self.summary = " ".join([par.text for par in get_xpath(self.dom, '//div[@class="summary module"]//blockquote//p') if par.text])
         self.relationships = [cat.text for cat in get_xpath(self.dom, '//dd[@class="relationship tags"]/ul/li/a')]
         self.series = get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a')[0].text if get_xpath(self.dom, '//dd[@class="series"]//span[@class="position"]/a') else None  # lelijk
-        self.last_updated = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="status"]')[0].text
+        self.last_updated = get_xpath(self.dom, '//dl[@class="stats"]/dd[@class="status"]')[0].text if get_xpath(self.dom, '//dl[@class="stats"]/dt[@class="status"]') else None  # lelijk
 
     # def authors(self):
         
