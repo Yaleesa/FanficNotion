@@ -227,6 +227,7 @@ class FanficDatabaseEndpoint:
         }
 
     def LastUpdated(self, last_updated):
+        last_updated = last_updated if last_updated else self.Published['Published']['rich_text'][0]['plain_text']
         return {
             "Last Updated": {
                 "type": "rich_text",

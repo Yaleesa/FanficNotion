@@ -52,7 +52,7 @@ class DatabaseRead:
         response = requests.post(url, json=payload, headers=headers)
 
         data = response.json()
-        print(data)
+
         results = data["results"]
         while data["has_more"] and get_all:
             payload = {"page_size": page_size, "start_cursor": data["next_cursor"]}
