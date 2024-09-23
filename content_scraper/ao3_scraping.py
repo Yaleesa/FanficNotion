@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup 
 from lxml import etree 
 import requests 
+import logging
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 HEADERS = ({'User-Agent': 
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
@@ -10,17 +13,20 @@ HEADERS = ({'User-Agent':
 
 
 def get_page(url):
-    # print(f'dit is de url: {url}')
     webpage = requests.get(url, headers=HEADERS)
-    # print(f'respinse url: {webpage.request.url}')
-    # print(webpage.request.headers)
-    # print(webpage.text)
+    try:
+        if webpage.request.url != url:
+            logger.error(f"Redirect detected: requested URL {url}, but got {webpage.request.url}")
+            raise ValueError("Got a redirect, the page might be restricted by a login")
+
+        soup = BeautifulSoup(webpage.content, "html.parser") 
+        dom = etree.HTML(str(soup))
+        return dom
+    except requests.RequestException as e:
+        logger.error(f"Request failed: {e}")
+        raise
     
-    soup = BeautifulSoup(webpage.content, "html.parser") 
-    dom = etree.HTML(str(soup))
-    return dom
-
-
+    
 def get_xpath(dom, path):
     return dom.xpath(path)
 

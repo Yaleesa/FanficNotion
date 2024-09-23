@@ -3,9 +3,9 @@ name: run fanfictonotion
 on: 
   workflow_dispatch:
     inputs:
-        url:
-          description: "url to parse"
-
+      url:
+        description: "url to parse"
+        required: true
 
 jobs:
   build:
@@ -25,9 +25,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: check url input
+        run: |
+          if [ -z "${{ github.event.inputs.url }}" ]; then
+            echo "Error: URL input is required."
+            exit 1
+          fi
+
       - name: execute py script # run main.py
-        run: python run.py
+        run: python main.py --url ${{ github.event.inputs.url }}
         env:
           NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
           DATABASE_ID: ${{ vars.DATABASE_ID }}
-          URL: ${{ github.event.inputs.url }}
