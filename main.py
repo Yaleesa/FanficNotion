@@ -22,14 +22,14 @@ def scrape_content(url):
         raise ValueError("URL is not from AO3")
 
 
-def build_data(scraped_fic):
+def build_data(scraped_fic, url):
     # convert to database/page endpoint
     payload_data = FanficDatabaseEndpoint(
         fanfic_title=scraped_fic.title, 
         fandom=scraped_fic.fandom,
         authors=scraped_fic.authors,
         word_count=int(scraped_fic.word_count.replace(",", "")),
-        fic_link=settings['URL'],
+        fic_link=url,
         summary=scraped_fic.summary,
         pairings=scraped_fic.relationships,
         reading_status="Not Read",
@@ -53,7 +53,7 @@ def send_to_notion(data):
 
 def run(url):
     scraped_fic = scrape_content(url)
-    data = build_data(scraped_fic)
+    data = build_data(scraped_fic, url)
     return send_to_notion(data)
 
 
