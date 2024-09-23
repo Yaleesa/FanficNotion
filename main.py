@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def scrape_content(url=settings['URL']):
+def scrape_content(url):
     # scrape page
     if url.startswith("https://archiveofourown.org"):
         try:
