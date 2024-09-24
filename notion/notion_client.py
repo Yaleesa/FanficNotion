@@ -1,7 +1,11 @@
 import requests
 import json
+import logging
 
 from config import settings
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 headers = {
     "Authorization": "Bearer " + settings['NOTION_API_TOKEN'],
@@ -38,33 +42,48 @@ class DatabaseUpdate:
 
 
 class DatabaseRead:
-    def get_fics(database_id=settings['DATABASE_ID'], num_pages=None):
+    def __init__(self, database_id=settings['DATABASE_ID']):
+        self.url = f"https://api.notion.com/v1/databases/{database_id}/query"
+        self.payload = {"page_size": 100}
+
+    def get_pages(self, num_pages=None):
         """
         If num_pages is None, get all pages, otherwise just the defined number.
         """
-        url = f"https://api.notion.com/v1/databases/{database_id}/query"
 
         get_all = num_pages is None
-        page_size = 100 if get_all else num_pages
+        self.payload['page_size'] = 100 if get_all else num_pages
 
-        payload = {"page_size": page_size}
+        # payload = {"page_size": page_size}
         #{"page_size": page_size, "filter": {"property": "Reading Status", "select": {"equals": "Reading"}}}
-        response = requests.post(url, json=payload, headers=headers)
-
-        data = response.json()
-
-        results = data["results"]
-        while data["has_more"] and get_all:
-            payload = {"page_size": page_size, "start_cursor": data["next_cursor"]}
-            url = f"https://api.notion.com/v1/databases/{settings['DATABASE_ID']}/query"
-            response = requests.post(url, json=payload, headers=headers)
+        results = []
+        try:
+            response = requests.post(self.url, json=self.payload, headers=headers)
+            response.raise_for_status()  # Raise an HTTPError for bad responses
             data = response.json()
             results.extend(data["results"])
 
+            while data["has_more"] and get_all:
+                self.payload['start_cursor'] = data["next_cursor"]
+                response = requests.post(self.url, json=self.payload, headers=headers)
+                response.raise_for_status()  # Raise an HTTPError for bad responses
+                data = response.json()
+                results.extend(data["results"])
+        except requests.exceptions.RequestException as e:
+            logging.error(f"HTTP request failed: {e}")
+            raise Exception("HTTP request failed") from None
+
         return results
     
-    def dump_to_file(data):
+    def dump_to_file(self, data):
         with open('db.json', 'w', encoding='utf8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 
+
+if __name__ == "__main__":
+    db_read = DatabaseRead()
+    results = db_read.get_pages()
+    # db_read.dump_to_file(results)
+    print(results)
+    # print(json.dumps(results[0]["properties"]["Pairing"]))
 # print(json.dumps(results[1]["properties"]["Fandom"]))

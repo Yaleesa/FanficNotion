@@ -15,7 +15,7 @@ HEADERS = ({'User-Agent':
 def get_page(url):
     webpage = requests.get(url, headers=HEADERS)
     try:
-        if webpage.request.url != url:
+        if 'login' in webpage.request.url:
             logger.error(f"Redirect detected: requested URL {url}, but got {webpage.request.url}")
             raise ValueError("Got a redirect, the page might be restricted by a login")
 
@@ -26,7 +26,7 @@ def get_page(url):
         logger.error(f"Request failed: {e}")
         raise
     
-    
+
 def get_xpath(dom, path):
     return dom.xpath(path)
 
